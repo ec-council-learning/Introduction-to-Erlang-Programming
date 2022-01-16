@@ -15,18 +15,8 @@ test() ->
   [1.0, 1.5] = my_lists:half(L2),
   ok.
 
-map(_G, []) -> [];
-map(G, [H|T]) ->
-  [G(H) | map(G, T)].
+even(Xs) -> [(X rem 2) == 0 || X <- Xs].
 
-even(Xs) ->
-  map(fun is_even/1, Xs).
-is_even(H) -> (H rem 2) == 0.
+double(Xs) -> [X * 2 || X <- Xs].
 
-double(Xs) ->
-  map(fun do_double/1,Xs).
-do_double(H) -> H * 2.
-
-half(Xs) ->
-  map(fun do_half/1, Xs).
-do_half(H) -> H/2.
+half(Xs) -> [X / 2 || X <- Xs].
