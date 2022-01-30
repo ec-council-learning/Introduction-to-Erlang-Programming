@@ -17,32 +17,20 @@ test() ->
 %%% API -----------------------------------------
 start() ->
     spawn(my_kv, init, []).
-
 get(Key, KV) ->
     KV ! {get, Key, self()},
-    receive
-        Value -> Value
-    end.
-
+    receive Value -> Value end.
 set(Key, Value, KV) ->
-    KV ! {set, Key, Value},
-    ok.
+    KV ! {set, Key, Value}, ok.
+stop(KV) -> KV ! stop, ok.
 
-stop(KV) ->
-    KV ! stop,
-    ok.
+init() -> loop(#{}).
 
-%%% SERVER --------------------------------------
-init() ->
-    InitialState = #{},
-    loop(InitialState).
-
-loop(State) ->
+loop(St) ->
   receive
-    {get, Key, Caller} ->
-        Caller ! maps:get(Key, State, not_found),
-        loop(State);
-    {set, Key, Value} ->
-        loop(State#{Key => Value});
+    {get, K, C} ->
+        C ! maps:get(K, St, not_found),
+        loop(St);
+    {set, K, V} -> loop(St#{K => V});
     stop -> done
   end.
