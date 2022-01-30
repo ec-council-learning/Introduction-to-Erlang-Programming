@@ -16,21 +16,21 @@ test() ->
 
 %%% API -----------------------------------------
 start() ->
-    spawn(my_kv, init, []).
+    my_server:start(my_kv).
 get(Key, KV) ->
-    KV ! {get, Key, self()},
-    receive Value -> Value end.
+    my_server:call(KV, {get, Key}).
 set(Key, Value, KV) ->
-    KV ! {set, Key, Value}, ok.
-stop(KV) -> KV ! stop, ok.
+    my_server:cast(KV, {set, Key, Value}).
+stop(KV) -> my_server:stop(KV).
 
 init() -> loop(#{}).
 
 loop(St) ->
   receive
-    {get, K, C} ->
+    {call, {get, K}, C} ->
         C ! maps:get(K, St, not_found),
         loop(St);
-    {set, K, V} -> loop(St#{K => V});
+    {cast, {set, K, V}} ->
+        loop(St#{K => V});
     stop -> done
   end.
