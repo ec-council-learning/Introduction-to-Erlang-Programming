@@ -1,7 +1,9 @@
 -module my_kv.
 -export [test/0].
 -export [start/0, get/2, set/3, stop/1].
--export [init/0, handle_call/2, handle_cast/2].
+-export [init/1, handle_call/3, handle_cast/2].
+
+-behaviour gen_server.
 
 %%% TEST ----------------------------------------
 test() ->
@@ -16,17 +18,17 @@ test() ->
 
 %%% API -----------------------------------------
 start() ->
-    my_server:start(my_kv).
+    {ok, KV} = gen_server:start(my_kv, noarg, []), KV.
 get(Key, KV) ->
-    my_server:call(KV, {get, Key}).
+    gen_server:call(KV, {get, Key}).
 set(Key, Value, KV) ->
-    my_server:cast(KV, {set, Key, Value}).
-stop(KV) -> my_server:stop(KV).
+    gen_server:cast(KV, {set, Key, Value}).
+stop(KV) -> gen_server:stop(KV).
 
-init() -> #{}.
+init(noarg) -> {ok, #{}}.
 
-handle_call({get, K}, St) ->
-    {maps:get(K, St, not_found), St}.
+handle_call({get, K}, _From, St) ->
+    {reply, maps:get(K, St, not_found), St}.
 
 handle_cast({set, K, V}, St) ->
-    St#{K => V}.
+    {noreply, St#{K => V}}.
