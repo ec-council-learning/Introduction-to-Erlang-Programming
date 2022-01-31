@@ -1,7 +1,7 @@
 -module my_kv.
 -export [test/0].
 -export [start/0, get/2, set/3, stop/1].
--export [init/0].
+-export [init/0, handle_call/2, handle_cast/2].
 
 %%% TEST ----------------------------------------
 test() ->
@@ -23,14 +23,10 @@ set(Key, Value, KV) ->
     my_server:cast(KV, {set, Key, Value}).
 stop(KV) -> my_server:stop(KV).
 
-init() -> loop(#{}).
+init() -> #{}.
 
-loop(St) ->
-  receive
-    {call, {get, K}, C} ->
-        C ! maps:get(K, St, not_found),
-        loop(St);
-    {cast, {set, K, V}} ->
-        loop(St#{K => V});
-    stop -> done
-  end.
+handle_call({get, K}, St) ->
+    {maps:get(K, St, not_found), St}.
+
+handle_cast({set, K, V}, St) ->
+    St#{K => V}.
