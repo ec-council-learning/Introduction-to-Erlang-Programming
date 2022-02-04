@@ -1,0 +1,11 @@
+{application,
+ my_app,
+ [{description, "My App"},
+  {vsn, "0.0.1"},
+  {registered, []},
+  {applications, [kernel, stdlib]},
+  {env, []},
+  {modules, []},
+  {maintainers,["Brujo Benavides"]},
+  {mod, {my_app, []}},
+  {licenses, ["MIT"]}]}.

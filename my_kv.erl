@@ -7,7 +7,7 @@
 
 %%% TEST ----------------------------------------
 test() ->
-    KV = my_kv:start(),
+    {ok, KV} = my_kv:start(),
     not_found = my_kv:get(a, KV),
     ok = my_kv:set(a, 1, KV),
     1 = my_kv:get(a, KV),
@@ -18,7 +18,7 @@ test() ->
 
 %%% API -----------------------------------------
 start() ->
-    {ok, KV} = gen_server:start(my_kv, noarg, []), KV.
+    gen_server:start_link(my_kv, noarg, []).
 get(Key, KV) ->
     gen_server:call(KV, {get, Key}).
 set(Key, Value, KV) ->

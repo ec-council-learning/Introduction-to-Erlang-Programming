@@ -23,7 +23,7 @@ test() ->
     ok.
 
 repeat(Fun, Times, Sleep) ->
-    gen_server:start(my_repeater, #{f => Fun, t => Times, s => Sleep}, []).
+    gen_server:start_link(my_repeater, #{f => Fun, t => Times, s => Sleep}, []).
 
 init(St = #{s := Sleep}) ->
     {ok, St, Sleep}.
