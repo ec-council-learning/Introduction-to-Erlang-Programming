@@ -15,7 +15,7 @@ test() ->
     KV2 = my_kv_sup:kv(),
     false = KV == KV2,
     not_found = my_kv:get(a, KV2),
-    true = my_kv_sup:stop(),
+    ok = my_kv_sup:stop(),
     ok.
 
 %%% API -----------------------------------------
@@ -23,13 +23,13 @@ start() ->
     supervisor:start_link({local, my_kv_sup}, my_kv_sup, noarg).
 
 kv() ->
-    [KV] = [KVPid || {kv, KVPid, worker, [my_kv]} <- supervisor:which_children(my_kv_sup)],
+    [{kv, KV, worker, [my_kv]}] =
+        supervisor:which_children(my_kv_sup),
     KV.
 
 stop() ->
-    SupPid = whereis(my_kv_sup),
-    unlink(SupPid),
-    exit(SupPid, shutdown).
+    gen_server:stop(my_kv_sup).
 
+%%% CALLBACKS -----------------------------------
 init(noarg) ->
     {ok, {#{}, [#{id => kv, start => {my_kv, start, []}}]}}.
