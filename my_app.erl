@@ -20,6 +20,6 @@ test() ->
     undefined = whereis(my_kv_sup),
     ok.
 
-start(_, _) -> my_sup:start().
+start(_, noarg) -> my_sup:start().
 
 stop(_) -> ok.
