@@ -1,20 +1,8 @@
 -module my_kv.
--export [test/0].
 -export [start/0, get/2, set/3, stop/1].
 -export [init/1, handle_call/3, handle_cast/2].
 
 -behaviour gen_server.
-
-%%% TEST ----------------------------------------
-test() ->
-    {ok, KV} = my_kv:start(),
-    not_found = my_kv:get(a, KV),
-    ok = my_kv:set(a, 1, KV),
-    1 = my_kv:get(a, KV),
-    ok = my_kv:set(a, 2, KV),
-    2 = my_kv:get(a, KV),
-    not_found = my_kv:get(b, KV),
-    ok = my_kv:stop(KV).
 
 %%% API -----------------------------------------
 start() ->
