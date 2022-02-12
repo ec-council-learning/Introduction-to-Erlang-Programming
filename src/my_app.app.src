@@ -7,5 +7,5 @@
   {applications, [kernel, stdlib]},
   {mod, {my_app, noarg}},
   {env, []},
-  {maintainers,["EC Council"]},
+  {maintainers, ["EC Council"]},
   {licenses, ["MIT"]}]}.

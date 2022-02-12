@@ -1,7 +1,12 @@
--module my_kv_sup_SUITE.
--export [test/1, all/0].
--behaviour ct_suite.
-all() -> [test].
+-module(my_kv_sup_SUITE).
+
+-export([test/1, all/0]).
+
+-behaviour(ct_suite).
+
+all() ->
+    [test].
+
 test(_) ->
     {ok, _} = my_kv_sup:start(),
     KV = my_kv_sup:kv(),

@@ -1,7 +1,11 @@
--module my_app.
--export [start/2, stop/1].
--behaviour application.
+-module(my_app).
 
-start(_, noarg) -> my_sup:start().
+-export([start/2, stop/1]).
 
-stop(_) -> ok.
+-behaviour(application).
+
+start(_, noarg) ->
+    my_sup:start().
+
+stop(_) ->
+    ok.

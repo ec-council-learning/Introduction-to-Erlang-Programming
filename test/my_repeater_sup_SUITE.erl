@@ -1,7 +1,12 @@
--module my_repeater_sup_SUITE.
--export [test/1, all/0].
--behaviour ct_suite.
-all() -> [test].
+-module(my_repeater_sup_SUITE).
+
+-export([test/1, all/0]).
+
+-behaviour(ct_suite).
+
+all() ->
+    [test].
+
 test(_) ->
     Counter = counters:new(1, []),
     Add1 = fun() -> counters:add(Counter, 1, 1) end,
